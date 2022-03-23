@@ -25,28 +25,34 @@ def classifyImage(interpreter, image):
 
 def main():
     # Load your model onto the TF Lite Interpreter
+    print('main started')
     interpreter = make_interpreter(modelPath)
     interpreter.allocate_tensors()
     labels = read_label_file(labelPath)
-
+    print('0')
     cap = cv2.VideoCapture(0)
+    print(cap.isOpened())
+    print('before while')
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
+            print('break! not ret')
             break
 
         # Flip image so it matches the training input
+        print('1')
         frame = cv2.flip(frame, 1)
-
+        print('2')
         # Classify and display image
         results = classifyImage(interpreter, frame)
-        cv2.imshow('frame', frame)
+        print('3')
+        # cv2.imshow('frame', frame)
         print(f'Label: {labels[results[0].id]}, Score: {results[0].score}')
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
+        print('4')
         cap.release()
-        cv2.destroyAllWindows()
+        # cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
